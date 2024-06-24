@@ -20,6 +20,7 @@ class GamemodeCommand : SCommand {
         fun gamemode(player: Player, gamemode: GameMode) {
             player.gameMode = gamemode
             player.persistentDataContainer.set(gamemodeKey, PersistentDataType.BYTE, gamemode.value.toByte())
+            FlyCommand.enableFlyIfNeeded(player)
         }
 
         fun gamemode(player: Player): GameMode {
@@ -57,29 +58,50 @@ class GamemodeCommand : SCommand {
         return CommandAPICommand(gamemodeName)
             .withAliases("gm$short")
             .withPermission("kotlinpl.gamemode.$gamemodeName")
-            .withRequirement { sender -> if (sender is Player) sender.gameMode != gamemode else true }
             .withOptionalArguments(
-                SCommand.playerArgument("target").executes(CommandExecutor { sender, args ->
-                    val target = args.get("target") as Player
-                    target.gameMode = gamemode
-
-                    sender.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
-                    target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${sender.name}</white>!"))
-                    gamemode(target, gamemode)
-                })
+                SCommand.playerArgument("target")
             )
             .executesPlayer(PlayerCommandExecutor { player, args ->
                 val target = args.getOrDefault("target", player) as Player
                 target.gameMode = gamemode
 
                 if (target == player) {
+                    if (target.gameMode == gamemode) {
+                        player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>Your</white> gamemode is already <white>$gamemodeName</white>!"))
+                        return@PlayerCommandExecutor
+                    }
+
                     player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set your gamemode to <white>$gamemodeName</white>!"))
                     gamemode(player, gamemode)
                     return@PlayerCommandExecutor
                 }
 
+                if (target.gameMode == gamemode) {
+                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already <white>$gamemodeName</white>!"))
+                    return@PlayerCommandExecutor
+                }
+
                 player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
                 target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${player.name}</white>!"))
+                gamemode(target, gamemode)
+            })
+            .executes(CommandExecutor { sender, args ->
+                val target = args.get("target") as Player?
+
+                if (target == null) {
+                    sender.sendMessage(TextUtil.parse("<dark_red>Please specify a player!"))
+                    return@CommandExecutor
+                }
+
+                if (target.gameMode == gamemode) {
+                    sender.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already <white>$gamemodeName</white>!"))
+                    return@CommandExecutor
+                }
+
+                target.gameMode = gamemode
+
+                sender.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
+                target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${sender.name}</white>!"))
                 gamemode(target, gamemode)
             })
 

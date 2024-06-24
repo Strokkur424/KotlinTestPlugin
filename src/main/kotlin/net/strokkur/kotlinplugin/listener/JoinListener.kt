@@ -2,6 +2,7 @@ package net.strokkur.kotlinplugin.listener
 
 import net.strokkur.kotlinplugin.commands.FlyCommand
 import net.strokkur.kotlinplugin.commands.GamemodeCommand
+import net.strokkur.kotlinplugin.util.TextUtil
 import org.bukkit.GameMode
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -19,11 +20,8 @@ class JoinListener : Listener {
         }
 
         if (FlyCommand.enableFlyIfNeeded(player)) {
-            player.sendMessage("<gold><bold>[!]</gold> <yellow>You are still flying!")
+            player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>You are still flying!"))
         }
     }
-
-
-
 
 }
