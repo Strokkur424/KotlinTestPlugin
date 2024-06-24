@@ -18,7 +18,9 @@ class JoinListener : Listener {
             return
         }
 
-        FlyCommand.enableFlyIfNeeded(player)
+        if (FlyCommand.enableFlyIfNeeded(player)) {
+            player.sendMessage("<gold><bold>[!]</gold> <yellow>You are still flying!")
+        }
     }
 
 

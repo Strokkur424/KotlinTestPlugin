@@ -16,6 +16,11 @@ class FlyCommand : SCommand {
         return CommandAPICommand("fly")
             .withPermission("kotlinpl.fly")
             .executesPlayer(PlayerCommandExecutor { player, _ ->
+                if (player.isFlying && (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR)) {
+                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red>You can't stop flying in ${player.gameMode.name.lowercase()} mode!"))
+                    return@PlayerCommandExecutor;
+                }
+
                 val enabled = togglePlayerFlight(player)
 
                 if (enabled) {

@@ -1,7 +1,7 @@
 package net.strokkur.kotlinplugin.commands
 
 import dev.jorel.commandapi.CommandAPICommand
-import dev.jorel.commandapi.executors.ConsoleCommandExecutor
+import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import net.strokkur.kotlinplugin.KotlinPlugin
 import net.strokkur.kotlinplugin.util.SCommand
@@ -11,20 +11,22 @@ import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
-class GamemodeCommand: SCommand {
+class GamemodeCommand : SCommand {
 
+    @Suppress("UnstableApiUsage")
     companion object {
         private val gamemodeKey = NamespacedKey(KotlinPlugin.plugin!!, "gamemode")
 
         fun gamemode(player: Player, gamemode: GameMode) {
             player.gameMode = gamemode
-            player.persistentDataContainer.set(gamemodeKey, PersistentDataType.BYTE, gamemode.ordinal.toByte())
+            player.persistentDataContainer.set(gamemodeKey, PersistentDataType.BYTE, gamemode.value.toByte())
         }
 
-        @Suppress("UnstableApiUsage")
         fun gamemode(player: Player): GameMode {
             if (player.persistentDataContainer.has(gamemodeKey, PersistentDataType.BYTE)) {
-                return GameMode.getByValue(player.persistentDataContainer.get(gamemodeKey, PersistentDataType.BYTE)!!.toInt())!!
+                return GameMode.getByValue(
+                    player.persistentDataContainer.get(gamemodeKey, PersistentDataType.BYTE)!!.toInt()
+                )!!
             }
 
             gamemode(player, player.gameMode)
@@ -33,7 +35,7 @@ class GamemodeCommand: SCommand {
     }
 
     override fun firstCommand(): CommandAPICommand {
-        val subcommands = emptyArray<CommandAPICommand>()
+        val subcommands = arrayOfNulls<CommandAPICommand>(4)
 
         subcommands[0] = subcommand(GameMode.CREATIVE, "c")
         subcommands[1] = subcommand(GameMode.SURVIVAL, "s")
@@ -41,7 +43,7 @@ class GamemodeCommand: SCommand {
         subcommands[3] = subcommand(GameMode.SPECTATOR, "sp")
 
         for (v in subcommands) {
-            v.register()
+            v?.register()
         }
 
         return CommandAPICommand("gamemode")
@@ -57,7 +59,7 @@ class GamemodeCommand: SCommand {
             .withPermission("kotlinpl.gamemode.$gamemodeName")
             .withRequirement { sender -> if (sender is Player) sender.gameMode != gamemode else true }
             .withOptionalArguments(
-                SCommand.playerArgument("target").executesConsole(ConsoleCommandExecutor { sender, args ->
+                SCommand.playerArgument("target").executes(CommandExecutor { sender, args ->
                     val target = args.get("target") as Player
                     target.gameMode = gamemode
 

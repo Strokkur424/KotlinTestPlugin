@@ -17,13 +17,10 @@ dependencies {
     paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 
     implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23")
 }
 
 tasks.withType<ShadowJar> {
-    dependencies {
-        include(dependency("dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.5.0"))
-    }
-
     relocate("dev.jorel.commandapi", "net.strokkur.kotlinplugin.libs.commandapi")
 }
 

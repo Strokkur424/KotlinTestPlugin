@@ -24,7 +24,7 @@ class SpeedCommand : SCommand {
                     player.walkSpeed = speed / 10f
                 }
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> Your ${type}ing speed has been set to <white>$speed</white>!"))
+                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your ${type}ing speed has been set to <white>$speed</white>!"))
             })
     }
 
@@ -35,7 +35,7 @@ class SpeedCommand : SCommand {
                 val speed: Int = args.get("speed") as Int
                 player.flySpeed = speed / 10f
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> Your flying speed has been set to <white>$speed</white>!"))
+                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your flying speed has been set to <white>$speed</white>!"))
             })
     }
 
@@ -46,7 +46,7 @@ class SpeedCommand : SCommand {
                 val speed: Int = args.get("speed") as Int
                 player.walkSpeed = speed / 10f
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> Your walking speed has been set to <white>$speed</white>!"))
+                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your walking speed has been set to <white>$speed</white>!"))
             })
     }
 }
