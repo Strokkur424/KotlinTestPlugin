@@ -36,40 +36,41 @@ class GamemodeCommand : SCommand {
     }
 
     override fun firstCommand(): CommandAPICommand {
-        val subcommands = arrayOfNulls<CommandAPICommand>(4)
 
-        subcommands[0] = subcommand(GameMode.CREATIVE, "c")
-        subcommands[1] = subcommand(GameMode.SURVIVAL, "s")
-        subcommands[2] = subcommand(GameMode.ADVENTURE, "a")
-        subcommands[3] = subcommand(GameMode.SPECTATOR, "sp")
-
-        for (v in subcommands) {
-            v?.register()
-        }
+        subcommand(GameMode.CREATIVE, "gmc", "creative").register()
+        subcommand(GameMode.SURVIVAL, "gms","survival").register()
+        subcommand(GameMode.ADVENTURE, "gma", "adventure").register()
+        subcommand(GameMode.SPECTATOR, "gmsp", "spectator").register()
 
         return CommandAPICommand("gamemode")
             .withAliases("gm")
             .withPermission("kolinpl.gamemode")
-            .withSubcommands(*subcommands)
+            .withSubcommands(
+                subcommand(GameMode.CREATIVE, "creative"),
+                subcommand(GameMode.SURVIVAL, "survival"),
+                subcommand(GameMode.ADVENTURE, "adventure"),
+                subcommand(GameMode.SPECTATOR, "spectator")
+            )
     }
 
-    private fun subcommand(gamemode: GameMode, short: String): CommandAPICommand {
+    private fun subcommand(gamemode: GameMode, name: String, vararg aliases: String): CommandAPICommand {
         val gamemodeName = gamemode.name.lowercase()
-        return CommandAPICommand(gamemodeName)
-            .withAliases("gm$short")
+        return CommandAPICommand(name)
+            .withAliases(*aliases)
             .withPermission("kotlinpl.gamemode.$gamemodeName")
             .withOptionalArguments(
                 SCommand.playerArgument("target")
             )
             .executesPlayer(PlayerCommandExecutor { player, args ->
                 val target = args.getOrDefault("target", player) as Player
-                target.gameMode = gamemode
 
                 if (target == player) {
                     if (target.gameMode == gamemode) {
-                        player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>Your</white> gamemode is already <white>$gamemodeName</white>!"))
+                        player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red>Your gamemode is already set to <white>$gamemodeName</white>!"))
                         return@PlayerCommandExecutor
                     }
+
+                    target.gameMode = gamemode
 
                     player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set your gamemode to <white>$gamemodeName</white>!"))
                     gamemode(player, gamemode)
@@ -77,9 +78,11 @@ class GamemodeCommand : SCommand {
                 }
 
                 if (target.gameMode == gamemode) {
-                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already <white>$gamemodeName</white>!"))
+                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
                     return@PlayerCommandExecutor
                 }
+
+                target.gameMode = gamemode
 
                 player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
                 target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${player.name}</white>!"))
@@ -94,7 +97,7 @@ class GamemodeCommand : SCommand {
                 }
 
                 if (target.gameMode == gamemode) {
-                    sender.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already <white>$gamemodeName</white>!"))
+                    sender.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
                     return@CommandExecutor
                 }
 
