@@ -4,9 +4,8 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.arguments.IntegerArgument
 import dev.jorel.commandapi.arguments.MultiLiteralArgument
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.strokkur.kotlinplugin.util.SCommand
-import net.strokkur.kotlinplugin.util.TextUtil
+import net.strokkur.kotlinplugin.util.parse
 
 class SpeedCommand : SCommand {
 
@@ -24,7 +23,7 @@ class SpeedCommand : SCommand {
                     player.walkSpeed = speed / 10f
                 }
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your ${type}ing speed has been set to <white>$speed</white>!"))
+                player.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Your ${type}ing speed has been set to <white>$speed</white>!"))
             })
     }
 
@@ -35,7 +34,7 @@ class SpeedCommand : SCommand {
                 val speed: Int = args.get("speed") as Int
                 player.flySpeed = speed / 10f
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your flying speed has been set to <white>$speed</white>!"))
+                player.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Your flying speed has been set to <white>$speed</white>!"))
             })
     }
 
@@ -46,7 +45,7 @@ class SpeedCommand : SCommand {
                 val speed: Int = args.get("speed") as Int
                 player.walkSpeed = speed / 10f
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your walking speed has been set to <white>$speed</white>!"))
+                player.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Your walking speed has been set to <white>$speed</white>!"))
             })
     }
 }

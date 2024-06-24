@@ -4,7 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import net.strokkur.kotlinplugin.KotlinPlugin
 import net.strokkur.kotlinplugin.util.SCommand
-import net.strokkur.kotlinplugin.util.TextUtil
+import net.strokkur.kotlinplugin.util.parse
 import org.bukkit.GameMode
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -17,16 +17,16 @@ class FlyCommand : SCommand {
             .withPermission("kotlinpl.fly")
             .executesPlayer(PlayerCommandExecutor { player, _ ->
                 if (player.isFlying && (player.gameMode == GameMode.CREATIVE || player.gameMode == GameMode.SPECTATOR)) {
-                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red>You can't stop flying in ${player.gameMode.name.lowercase()} mode!"))
+                    player.sendMessage(parse("<dark_red><bold>[!]</dark_red> <red>You can't stop flying in ${player.gameMode.name.lowercase()} mode!"))
                     return@PlayerCommandExecutor;
                 }
 
                 val enabled = togglePlayerFlight(player)
 
                 if (enabled) {
-                    player.sendMessage(TextUtil.parse("<dark_green><bold>[!]</dark_green> <green>You are now flying!"))
+                    player.sendMessage(parse("<dark_green><bold>[!]</dark_green> <green>You are now flying!"))
                 } else {
-                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red>You are no longer flying!"))
+                    player.sendMessage(parse("<dark_red><bold>[!]</dark_red> <red>You are no longer flying!"))
                 }
             })
     }

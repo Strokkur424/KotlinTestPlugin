@@ -5,7 +5,7 @@ import dev.jorel.commandapi.executors.CommandExecutor
 import dev.jorel.commandapi.executors.PlayerCommandExecutor
 import net.strokkur.kotlinplugin.KotlinPlugin
 import net.strokkur.kotlinplugin.util.SCommand
-import net.strokkur.kotlinplugin.util.TextUtil
+import net.strokkur.kotlinplugin.util.parse
 import org.bukkit.GameMode
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -66,45 +66,45 @@ class GamemodeCommand : SCommand {
 
                 if (target == player) {
                     if (target.gameMode == gamemode) {
-                        player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red>Your gamemode is already set to <white>$gamemodeName</white>!"))
+                        player.sendMessage(parse("<dark_red><bold>[!]</dark_red> <red>Your gamemode is already set to <white>$gamemodeName</white>!"))
                         return@PlayerCommandExecutor
                     }
 
                     target.gameMode = gamemode
 
-                    player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set your gamemode to <white>$gamemodeName</white>!"))
+                    player.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Successfully set your gamemode to <white>$gamemodeName</white>!"))
                     gamemode(player, gamemode)
                     return@PlayerCommandExecutor
                 }
 
                 if (target.gameMode == gamemode) {
-                    player.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
+                    player.sendMessage(parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
                     return@PlayerCommandExecutor
                 }
 
                 target.gameMode = gamemode
 
-                player.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
-                target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${player.name}</white>!"))
+                player.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
+                target.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${player.name}</white>!"))
                 gamemode(target, gamemode)
             })
             .executes(CommandExecutor { sender, args ->
                 val target = args.get("target") as Player?
 
                 if (target == null) {
-                    sender.sendMessage(TextUtil.parse("<dark_red>Please specify a player!"))
+                    sender.sendMessage(parse("<dark_red>Please specify a player!"))
                     return@CommandExecutor
                 }
 
                 if (target.gameMode == gamemode) {
-                    sender.sendMessage(TextUtil.parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
+                    sender.sendMessage(parse("<dark_red><bold>[!]</dark_red> <red><white>${target.name}</white>'s gamemode is already set to <white>$gamemodeName</white>!"))
                     return@CommandExecutor
                 }
 
                 target.gameMode = gamemode
 
-                sender.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
-                target.sendMessage(TextUtil.parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${sender.name}</white>!"))
+                sender.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Successfully set <white>${target.name}</white>'s gamemode to <white>$gamemodeName</white>!"))
+                target.sendMessage(parse("<gold><bold>[!]</gold> <yellow>Your gamemode has been set to <white>$gamemodeName</white> by <white>${sender.name}</white>!"))
                 gamemode(target, gamemode)
             })
 
