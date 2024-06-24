@@ -1,0 +1,6 @@
+main: net.strokkur.kotlinplugin.KotlinPlugin
+api-version: '1.20'
+prefix: KotlinPlugin
+name: KotlinPlugin
+version: 1.0-FINAL
+authors: [ "Strokkur24" ]
